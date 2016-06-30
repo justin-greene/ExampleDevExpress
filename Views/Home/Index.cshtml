@@ -1,0 +1,25 @@
+﻿@model System.Collections.IEnumerable
+
+@{
+    ViewBag.Title = "Index";
+}
+<script>
+    function onCheckedChanged(s, e) {
+        if (s.GetChecked())
+            GridView.PerformCallback({ flag: "ungroup" });
+        else {
+            GridView.PerformCallback({ flag: "group" });
+        }
+    }
+</script>
+<h2>Index</h2>
+
+@Html.DevExpress().CheckBox(settings => {
+    settings.Name = "GroupCheck";
+    settings.Checked = false;
+    settings.Properties.ClientSideEvents.CheckedChanged = "onCheckedChanged";
+    settings.Text = "Check to ungrop the grid";
+}).GetHtml()
+
+
+@Html.Partial("GridViewPartial", Model)
