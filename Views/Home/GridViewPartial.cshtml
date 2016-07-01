@@ -1,29 +1,56 @@
-﻿@{
+﻿@using System.Drawing
+@{
     var grid = Html.DevExpress().GridView(settings => {
         settings.Name = "GridView";
         settings.CallbackRouteValues = new { Controller = "Home", Action = "GridViewPartial" };
         settings.CustomActionRouteValues = new { Controller = "Home", Action = "CustomCallbackFromGrid" };
 
-        settings.Settings.ShowGroupPanel = true;
+        settings.Styles.AlternatingRow.Enabled = DefaultBoolean.Default;
+        settings.Styles.AlternatingRow.BackColor = Color.Snow;
+
+        settings.Settings.ShowGroupPanel = false;
         settings.KeyFieldName = "CustomerID";
 
-        settings.BeforeGetCallbackResult = (sender, e) => {
+        //settings.BeforeGetCallbackResult = (sender, e) => {
+        //    if (ViewData["flag"] != null)
+        //    {
+        //        if ((string) ViewData["flag"] == "ungroup")
+        //        {
+        //            (sender as MVCxGridView).ClearSort();
+        //        }
+        //        else
+        //        {
+        //            (sender as MVCxGridView).GroupBy(settings.Columns["FirstName"]);
+        //        }
+        //    }
+        //};
+
+        settings.BeforeGetCallbackResult = (sender, e) =>
+        {
             if (ViewData["flag"] != null)
             {
-                if ((string) ViewData["flag"] == "ungroup")
-                {
-                    (sender as MVCxGridView).ClearSort();
-                }
+                MVCxGridView gridView = sender as MVCxGridView;
+
+                if ("ungroup".Equals(ViewData["flag"]))
+                    gridView.ClearSort();
                 else
-                {
-                    (sender as MVCxGridView).GroupBy(settings.Columns["FirstName"]);
-                }
+                    gridView.GroupBy(gridView.Columns["FirstName"]);
             }
         };
-        settings.Columns.Add("FirstName");
+
+        //settings.Columns.Add("FirstName");
         settings.Columns.Add("LastName");
         settings.Columns.Add(new GridViewDataDateColumn() { FieldName = "BirthDate" });
         settings.Columns.Add(new GridViewDataColumn() { FieldName = "CustomerID" });
+
+        settings.Columns.Add(column =>
+        {
+            column.Name = "FirstName";
+            column.FieldName = "FirstName";
+            column.GroupIndex = 0;
+            column.Caption = "FirstName";
+
+        });
 
     });
 }

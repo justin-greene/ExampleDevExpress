@@ -3,23 +3,43 @@
 @{
     ViewBag.Title = "Index";
 }
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script>
-    function onCheckedChanged(s, e) {
-        if (s.GetChecked())
+    //function onCheckedChanged(s, e) {
+    //    if (s.GetChecked())
+    //        GridView.PerformCallback({ flag: "ungroup" });
+    //    else {
+    //        GridView.PerformCallback({ flag: "group" });
+    //    }
+    //}
+    //debugger;
+    var groupingEnabled = true;
+    $('#EnableGroupingButton').click(function () {
+        debugger;
+        if (groupingEnabled) {
+            //disable grouping
             GridView.PerformCallback({ flag: "ungroup" });
-        else {
-            GridView.PerformCallback({ flag: "group" });
+            $('#EnableGroupingButton').html("Show Categories");
         }
-    }
+        else {
+            //enable grouping
+            GridView.PerformCallback({ flag: "group" });
+            $('#EnableGroupingButton').html("Show All");
+        }
+        groupingEnabled = !groupingEnabled;
+    });
 </script>
 <h2>Index</h2>
 
-@Html.DevExpress().CheckBox(settings => {
+@*@Html.DevExpress().CheckBox(settings => {
     settings.Name = "GroupCheck";
     settings.Checked = false;
     settings.Properties.ClientSideEvents.CheckedChanged = "onCheckedChanged";
     settings.Text = "Check to ungrop the grid";
-}).GetHtml()
+}).GetHtml()*@
+
+
+<button type="button" id="EnableGroupingButton" class="btn btn-success">Show All</button>
 
 
 @Html.Partial("GridViewPartial", Model)
