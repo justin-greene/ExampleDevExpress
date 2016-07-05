@@ -6,8 +6,8 @@
 Html.DevExpress().GridView(settings =>
 {
     settings.Name = "gridView";
-    settings.CallbackRouteValues = new { Controller = "HotelInvoice", Action = "_responsiveGrid" };
-    settings.CustomActionRouteValues = new { Controller = "HotelInvoice", Action = "CustomCallbackFromGrid" };
+    settings.CallbackRouteValues = new { Controller = "Home", Action = "_responsiveGrid" };
+    settings.CustomActionRouteValues = new { Controller = "Home", Action = "CustomCallbackFromGrid" };
     settings.Width = Unit.Percentage(100);
 
 

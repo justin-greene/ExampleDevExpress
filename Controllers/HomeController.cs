@@ -74,7 +74,7 @@ namespace DXWebApplication5.Controllers
             table.Columns.Add("CompletionDate", typeof(DateTime));
             table.Columns.Add("FirstNight", typeof(DateTime));
             table.Columns.Add("LastNight", typeof(DateTime));
-            table.Columns.Add("WebHotelINvoiceEditable", typeof(bool));
+            table.Columns.Add("WebHotelInvoiceIsEditable", typeof(bool));
             table.Columns.Add("PriorityPayDaysToPay", typeof(int));
             table.Columns.Add("CreationDate", typeof(DateTime));
             table.Columns.Add("HasReservationVCards", typeof(bool));
