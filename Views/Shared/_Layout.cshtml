@@ -1,35 +1,59 @@
 <!DOCTYPE html>
-
-<html>
+<html lang="en">
 <head>
-    <title>@ViewBag.Title</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
 
-    <script src="@Url.Content("~/Scripts/jquery-1.6.2.min.js")" type="text/javascript"></script>
-    @Html.DevExpress().GetStyleSheets( 
-    new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout }, 
-    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors }, 
-    new StyleSheet { ExtensionSuite = ExtensionSuite.HtmlEditor }, 
-    new StyleSheet { ExtensionSuite = ExtensionSuite.GridView }, 
-    new StyleSheet { ExtensionSuite = ExtensionSuite.PivotGrid },
-    new StyleSheet { ExtensionSuite = ExtensionSuite.Chart },
-    new StyleSheet { ExtensionSuite = ExtensionSuite.Report },
-	new StyleSheet { ExtensionSuite = ExtensionSuite.Scheduler },
-	new StyleSheet { ExtensionSuite = ExtensionSuite.TreeList }
-)
-@Html.DevExpress().GetScripts( 
-    new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout }, 
-    new Script { ExtensionSuite = ExtensionSuite.HtmlEditor }, 
-    new Script { ExtensionSuite = ExtensionSuite.GridView }, 
-    new Script { ExtensionSuite = ExtensionSuite.PivotGrid },
-    new Script { ExtensionSuite = ExtensionSuite.Editors }, 
-    new Script { ExtensionSuite = ExtensionSuite.Chart },
-    new Script { ExtensionSuite = ExtensionSuite.Report },
-	new Script { ExtensionSuite = ExtensionSuite.Scheduler },
-	new Script { ExtensionSuite = ExtensionSuite.TreeList }
-)
+    <title>Web Genesis &trade;</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../../Content/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    @*@Styles.Render("~/Content/Master")*@
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    @RenderSection("head", required: false)
+    @*@Scripts.Render("~/Scripts/Master")*@
+    @Html.DevExpress().GetStyleSheets(
+        new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+        new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+        new StyleSheet { ExtensionSuite = ExtensionSuite.GridView }
+    )
+    @Html.DevExpress().GetScripts(
+        new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+        new Script { ExtensionSuite = ExtensionSuite.GridView },
+        new Script { ExtensionSuite = ExtensionSuite.Editors }
+    )
 </head>
 
 <body>
-	@RenderBody()
+    <!-- Navigation -->
+    @RenderSection("NewRequestBanner", false)
+    <!-- Begin page content -->
+    <!--<div class="container">-->
+    <br />
+    <br />
+    @RenderSection("PageTitle", false)
+
+    <div id="genesisContainer">
+        <br />
+        @RenderBody()
+    </div>
+    <!--</div>-->
+
+    @*@Html.Partial("_Footer")*@
+
+
+    @RenderSection("Scripts", false)
 </body>
 </html>

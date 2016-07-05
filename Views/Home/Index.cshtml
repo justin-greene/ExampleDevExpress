@@ -1,45 +1,60 @@
-﻿@model System.Collections.IEnumerable
-
-@{
-    ViewBag.Title = "Index";
+﻿
+@section scripts {
+    @*@Scripts.Render("~/Scripts/b-grid")*@
+    
+    <script src="~/Scripts/jquery-1.6.2.js"></script>
+    <script type="text/javascript">
+        var groupingEnabled = true;
+        $('#EnableGroupingButton').click(function() {
+            if (groupingEnabled) {
+                //disable grouping
+                gridView.PerformCallback({ UseGrouping: "ungroup" });
+                $('#EnableGroupingButton').html("Show Categories");
+            }
+            else {
+                //enable grouping
+                gridView.PerformCallback({ UseGrouping: "group" });
+                $('#EnableGroupingButton').html("Show All");
+            }
+            groupingEnabled = !groupingEnabled;
+        });
+    </script>
 }
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script>
-    //function onCheckedChanged(s, e) {
-    //    if (s.GetChecked())
-    //        GridView.PerformCallback({ flag: "ungroup" });
-    //    else {
-    //        GridView.PerformCallback({ flag: "group" });
-    //    }
-    //}
-    //debugger;
-    var groupingEnabled = true;
-    $('#EnableGroupingButton').click(function () {
-        debugger;
-        if (groupingEnabled) {
-            //disable grouping
-            GridView.PerformCallback({ flag: "ungroup" });
-            $('#EnableGroupingButton').html("Show Categories");
-        }
-        else {
-            //enable grouping
-            GridView.PerformCallback({ flag: "group" });
-            $('#EnableGroupingButton').html("Show All");
-        }
-        groupingEnabled = !groupingEnabled;
-    });
-</script>
-<h2>Index</h2>
+@section PageTitle
+{
+    <br />
+    <div class="page-header row-fluid">
+        <h3>
+            Hotel Invoices
+        </h3>
+    </div>
 
-@*@Html.DevExpress().CheckBox(settings => {
-    settings.Name = "GroupCheck";
-    settings.Checked = false;
-    settings.Properties.ClientSideEvents.CheckedChanged = "onCheckedChanged";
-    settings.Text = "Check to ungrop the grid";
-}).GetHtml()*@
+}
 
+<div class="row">
+    <div class="col-md-12">
+        <div id="SearchContainer">
+            <br /><br />
 
-<button type="button" id="EnableGroupingButton" class="btn btn-success">Show All</button>
+            <form action="@Url.Action("List")" class="form-inline">
+                <span class="add-on">
+                    <i class="glyphicon glyphicon-calendar"></i>
+                </span>
+                <input class="input-small text-center datepicker  form-control" type="text" id="StartDate" name="begindate" value="@ViewData["BeginDate"]" />
+                <span class="add-on">-</span>
+                <input class="input-small text-center datepicker  form-control" type="text" id="EndDate" name="enddate" value="@ViewData["EndDate"]" />
+                <input type="submit" name="submit" value="Search Invoices" class="btn btn-success" />
+                <a href="@Url.Action("ExportToExcel")@Request.Url.Query" class="excel-list form-control"><img src="~/Content/images/xls.gif"/>@*@Html.Image("~/Content/images/xls.gif")*@</a>
+                <button type="button" id="EnableGroupingButton" class="btn btn-success">Show All</button>
+            </form>
+                <br /><br />
+            
+        </div>
+    </div>
 
-
-@Html.Partial("GridViewPartial", Model)
+    <div class="col-md-12">
+        <div>
+            @Html.Action("_responsiveGrid")
+        </div>
+    </div>
+</div>

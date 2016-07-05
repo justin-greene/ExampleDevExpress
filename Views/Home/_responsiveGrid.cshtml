@@ -1,0 +1,208 @@
+﻿@using System.Drawing
+@using System.Web.UI.WebControls
+@using DXWebApplication5.Models
+
+@(
+Html.DevExpress().GridView(settings =>
+{
+    settings.Name = "gridView";
+    settings.CallbackRouteValues = new { Controller = "HotelInvoice", Action = "_responsiveGrid" };
+    settings.CustomActionRouteValues = new { Controller = "HotelInvoice", Action = "CustomCallbackFromGrid" };
+    settings.Width = Unit.Percentage(100);
+
+
+
+    settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+    settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 800;
+    settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
+
+    settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+
+    settings.SettingsAdaptivity.AdaptiveDetailLayoutProperties.SettingsItems.ShowCaption = DefaultBoolean.True;
+    settings.SettingsAdaptivity.AdaptiveDetailLayoutProperties.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+    settings.SettingsAdaptivity.AdaptiveDetailLayoutProperties.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 800;
+
+    settings.Styles.AlternatingRow.Enabled = DefaultBoolean.Default;
+    settings.Styles.AlternatingRow.BackColor = Color.Snow;
+
+    settings.SettingsPager.Position = PagerPosition.Bottom;
+    settings.SettingsPager.FirstPageButton.Visible = true;
+    settings.SettingsPager.LastPageButton.Visible = true;
+    settings.SettingsPager.PageSizeItemSettings.Visible = true;
+    settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50" };
+    settings.SettingsPager.PageSizeItemSettings.ShowAllItem = true;
+    settings.SettingsPopup.HeaderFilter.Height = Unit.Pixel(440);
+    settings.SettingsPopup.HeaderFilter.Width = Unit.Pixel(400);
+
+    settings.Settings.ShowGroupPanel = false;
+    settings.SettingsBehavior.AllowGroup = true;
+    settings.SettingsBehavior.AllowSort = true;
+    settings.SettingsBehavior.AutoExpandAllGroups = false;
+    settings.SettingsSearchPanel.Visible = true;
+
+
+
+
+    settings.KeyFieldName = "WebHotelInvoiceId";
+
+    settings.Columns.Add(column =>
+    {
+        column.SetDataItemTemplateContent(m =>
+        {
+            var hotelInvoiceKey = DataBinder.Eval(m.DataItem, "HotelInvoiceKey");
+            bool editable = Convert.ToBoolean(DataBinder.Eval(m.DataItem, "WebHotelInvoiceIsEditable"));
+            if (hotelInvoiceKey != null)
+            {
+                ViewContext.Writer.Write(Html.ActionLink("View", "Show", new { HotelInvoiceId = DataBinder.Eval(m.DataItem, "HotelInvoiceKey") }));
+            }
+            else if (editable)
+            {
+                ViewContext.Writer.Write(Html.ActionLink("Edit", "Edit", new { id = DataBinder.Eval(m.DataItem, "WebHotelInvoiceId") }));
+            }
+            else
+            {
+                ViewContext.Writer.Write(Html.ActionLink("View", "Show", new { WebHotelInvoiceid = DataBinder.Eval(m.DataItem, "WebHotelInvoiceId") }));
+            }
+
+        });
+
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.Name = "Filter";
+        column.FieldName = "Filter";
+        column.GroupIndex = 0;
+        column.Caption = "Filter";
+
+    });
+
+    settings.BeforeGetCallbackResult = (sender, e) =>
+    {
+        if ((string)ViewData["UseGrouping"] != null)
+        {
+            if ((string)ViewData["UseGrouping"] == "ungroup")
+            {
+                (sender as MVCxGridView).ClearSort();
+            }
+            else
+            {
+                (sender as MVCxGridView).GroupBy(settings.Columns["Filter"]);
+            }
+        }
+    };
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "HotelName";
+
+        column.Settings.AllowHeaderFilter = DefaultBoolean.True;
+        column.SettingsHeaderFilter.Mode = GridHeaderFilterMode.CheckedList;
+
+        column.Caption = "Hotel Name";
+    });
+
+    settings.Columns.Add("HotelInvoiceNumber");
+
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "InvoiceDate";
+
+        column.SortIndex = 0;
+        column.SortOrder = DevExpress.Data.ColumnSortOrder.Descending;
+        column.Settings.AllowHeaderFilter = DefaultBoolean.True;
+        column.PropertiesEdit.DisplayFormatString = "d";
+        column.SettingsHeaderFilter.Mode = GridHeaderFilterMode.DateRangePicker;
+        column.Caption = "Invoice Date";
+
+    });
+
+    settings.Columns.Add("Nights");
+    settings.Columns.Add("InvoiceTotal");
+
+
+    settings.Columns.Add(column =>
+    {
+        column.SetDataItemTemplateContent(dataTemplate =>
+        {
+            var billing = DataBinder.Eval(dataTemplate.DataItem, "Billing");
+
+            Html.DevExpress().Label(label =>
+            {
+                label.Text = MethodsOfPayment.ToSimpleDesc(billing.ToString()).ToString();
+
+            }).Render();
+
+        });
+
+        column.Caption = "Method of Payment";
+
+    });
+
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "PaymentStatusDisplay";
+
+        column.SetDataItemTemplateContent(dataTemplate =>
+        {
+            var paymentDate = DataBinder.Eval(dataTemplate.DataItem, "PaymentDate").ToString();
+            var checkNumber = DataBinder.Eval(dataTemplate.DataItem, "CheckNumber").ToString();
+            var cardNumber = DataBinder.Eval(dataTemplate.DataItem, "CardNumber").ToString();
+            var cardTransanctionDate = DataBinder.Eval(dataTemplate.DataItem, "CardTransactionDate").ToString();
+            var priorityPayDaysToPay = DataBinder.Eval(dataTemplate.DataItem, "PriorityPayDaysToPay").ToString();
+            var creationDate = Convert.ToDateTime(DataBinder.Eval(dataTemplate.DataItem, "CreationDate").ToString());
+            var billing = DataBinder.Eval(dataTemplate.DataItem, "Billing").ToString();
+            var rejectionReason = DataBinder.Eval(dataTemplate.DataItem, "RejectionReason").ToString();
+            var completionDate = DataBinder.Eval(dataTemplate.DataItem, "CompletionDate").ToString();
+            var approvalDate = DataBinder.Eval(dataTemplate.DataItem, "ApprovalDate").ToString();
+            var hotelInvoiceKey = DataBinder.Eval(dataTemplate.DataItem, "HotelInvoiceKey").ToString();
+            string returnValue = string.Empty;
+
+            if (!string.IsNullOrEmpty(hotelInvoiceKey))
+            {
+                if (!string.IsNullOrEmpty(paymentDate) && !string.IsNullOrEmpty(checkNumber))
+                    returnValue = string.Format("Payment mailed via check #{0} on {1}.", checkNumber, Convert.ToDateTime(paymentDate).ToShortDateString());
+                else if (!string.IsNullOrEmpty(cardNumber) && !string.IsNullOrEmpty(cardTransanctionDate))
+                    returnValue = string.Format("Credit card charged on {0}.", Convert.ToDateTime(cardTransanctionDate).ToShortDateString());
+                else if (!string.IsNullOrEmpty(cardNumber))
+                    returnValue = "Credit card available.";
+                else if (Convert.ToDouble(priorityPayDaysToPay) > 0 && creationDate <= creationDate.AddDays(Convert.ToDouble(priorityPayDaysToPay)) && MethodsOfPayment.PostPayVCardTypes.Contains(billing))
+                {
+                    returnValue = "Credit card will be available on " + creationDate.AddDays(Convert.ToDouble(priorityPayDaysToPay)).ToShortDateString();
+                }
+                else if (!string.IsNullOrEmpty(paymentDate))
+                    returnValue = string.Format("Payment sent on {0}.", Convert.ToDateTime(paymentDate).ToShortDateString());
+                else
+                    returnValue = "Invoice accepted.  Awaiting processing by Creative Lodging Solutions.";
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(rejectionReason))
+                    returnValue = "Rejected: " + rejectionReason;
+                else if (!string.IsNullOrEmpty(completionDate) && string.IsNullOrEmpty(approvalDate))
+                    returnValue = "Awaiting approval by Creative Lodging Solutions because\n you changed the rate, tax, or misc. charges within the invoice.";
+                else if (string.IsNullOrEmpty(completionDate))
+                    returnValue = "Awaiting submission.";
+            }
+
+            Html.DevExpress().Label(label =>
+            {
+                label.Text = returnValue;
+
+            }).Render();
+
+        });
+        column.Caption = "Status";
+
+    });
+
+    settings.Columns.Add("HotelInvoiceKey").Visible = false;
+    settings.Columns.Add("WebHotelInvoiceIsEditable").Visible = false;
+
+
+
+
+}).Bind(Model).GetHtml()
+)
