@@ -79,15 +79,19 @@ Html.DevExpress().GridView(settings =>
 
     settings.BeforeGetCallbackResult = (sender, e) =>
     {
+        var grid = sender as MVCxGridView;
+        if (grid == null)
+            return;
+
         if ((string)ViewData["UseGrouping"] != null)
         {
             if ((string)ViewData["UseGrouping"] == "ungroup")
             {
-                (sender as MVCxGridView).ClearSort();
+                grid.ClearSort();
             }
             else
             {
-                (sender as MVCxGridView).GroupBy(settings.Columns["Filter"]);
+                grid.GroupBy(grid.DataColumns["Filter"]);
             }
         }
     };
