@@ -18,6 +18,11 @@
             }
             groupingEnabled = !groupingEnabled;
         });
+
+
+    function submitForm() {
+        $('#gridForm').submit();
+    }
     </script>
 }
 @section PageTitle
@@ -44,7 +49,7 @@
                 <span class="add-on">-</span>
                 <input class="input-small text-center datepicker  form-control" type="text" id="EndDate" name="enddate" value="@ViewData["EndDate"]" />
                 <input type="submit" name="submit" value="Search Invoices" class="btn btn-success" />
-                <a href="@Url.Action("ExportToExcel")@Request.Url.Query" class="excel-list form-control"><img src="~/Content/images/xls.gif"/>@*@Html.Image("~/Content/images/xls.gif")*@</a>
+                <a href="javascript:void(0)" class="excel-list form-control" onclick="return submitForm()"><img src="~/Content/images/xls.gif" /></a>
                 <button type="button" id="EnableGroupingButton" class="btn btn-success">Show All</button>
             </form>
                 <br /><br />
@@ -54,7 +59,10 @@
 
     <div class="col-md-12">
         <div>
-            @Html.Action("_responsiveGrid")
+            @using (Html.BeginForm("ExportToExcel", "Home", FormMethod.Post, new {id = "gridForm"}))
+            {
+                @Html.Action("_responsiveGrid")
+            }
         </div>
     </div>
 </div>

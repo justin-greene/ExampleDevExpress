@@ -1,0 +1,36 @@
+﻿@using System.Globalization
+@model RoomNight
+
+
+@{
+    CultureInfo culture = (CultureInfo) CultureInfo.CurrentCulture.Clone();
+    culture.NumberFormat.CurrencyNegativePattern = 1;
+        
+}    
+
+<tr class="bodyrow">
+    <td>
+        @Model.Night.ToShortDateString()
+    </td>
+
+    <td>
+        @Model.RoomNumber
+    </td>
+        
+    <td class="rate-field hotel-rate" >
+        @Model.HotelRate
+    </td>
+        
+    <td class="rate-field hotel-tax" >
+        @Math.Round(Model.HotelTax, 2)
+    </td>
+        
+    <td class="rate-field misc-charge" >
+        @Model.MiscCharge
+    </td>
+        
+    <td class="misc-description">
+        @Model.MiscChargeDescription
+    </td>
+    
+</tr>
