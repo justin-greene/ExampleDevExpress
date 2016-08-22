@@ -1,3 +1,4 @@
 ﻿@using DXWebApplication5.Controllers
+@using DXWebApplication5.Helpers
 
-@Html.DevExpress().GridView(HomeController.ExportHelper.GetGridSettings(false)).Bind(Model).GetHtml()
+@Html.DevExpress().GridView(Html.GetGridSettings()).Bind(Model).GetHtml()
